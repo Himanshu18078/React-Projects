@@ -3,14 +3,17 @@ import { createContext, useReducer } from "react";
 export const PostList = createContext({
   // The Following are the default values
   postList: [],
-  addPost: () => {},
-  deletePost: () => {},
+  addPost: () => { },
+  deletePost: () => { },
 });
 
 const postListReducer = (currentPostList, action) => {
   let newPostList = currentPostList
-  if(action.type === 'DELETE_POST'){
+  if (action.type === 'DELETE_POST') {
     newPostList = currentPostList.filter(post => post.id !== action.payLoad.postId)
+  }
+  else if(action.type === 'ADD_POST'){
+    newPostList = [action.payLoad , ...currentPostList];
   }
   return newPostList;
 };
@@ -19,18 +22,29 @@ const PostListProvider = ({ children }) => {
 
   const [postList, dispatchPostList] = useReducer(postListReducer, DEFAULT_POST_LIST);
 
-  const addPost = () => {};
-
-  const deletePost = (postId) => {
+  const addPost = (userId, postTitle, postBody, reaction, tags) => {
     dispatchPostList({
-      type : 'DELETE_POST',
-      payLoad : {
-        postId
-      }
+      type: 'ADD_POST',
+      payLoad: {
+        id: Date.now(),
+        title: postTitle,
+        body: postBody ,
+        reactions: reaction,
+        userId: userId,
+        tags: tags,
+      },
     })
   };
 
-  
+  const deletePost = (postId) => {
+    dispatchPostList(
+      {
+        type: 'DELETE_POST',
+        payLoad: {
+          postId
+        }
+      })
+  };
   return (
     <PostList.Provider
       value={{
