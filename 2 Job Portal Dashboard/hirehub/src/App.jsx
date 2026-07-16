@@ -1,8 +1,17 @@
+import { Route ,Routes } from "react-router-dom"
+import Jobs from "./pages/Jobs/Jobs"
+import SavedJobs from "./pages/SavedJobs/SavedJobs"
+import Home from "./pages/Home/Home"
+import Navbar from "./components/Navbar/Navbar"
 function App() {
-  return (
-    <>
-      <h1>hire hub</h1>
-    </>
+  return (<>
+    <Navbar />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/jobs" element = {<Jobs/>}></Route>
+      <Route path="/saved-jobs" element = {<SavedJobs/>}></Route>
+    </Routes>
+  </>
   )
 }
 
