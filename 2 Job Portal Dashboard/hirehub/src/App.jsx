@@ -3,6 +3,7 @@ import Jobs from "./pages/Jobs/Jobs"
 import SavedJobs from "./pages/SavedJobs/SavedJobs"
 import Home from "./pages/Home/Home"
 import Navbar from "./components/Navbar/Navbar"
+import "./App.css";
 function App() {
   return (<>
     <Navbar />
