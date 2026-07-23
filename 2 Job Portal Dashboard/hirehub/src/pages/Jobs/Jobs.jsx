@@ -1,7 +1,7 @@
 import jobs from "../../data/jobs";
 import JobCard from "../../components/JobCard/JobCard";
 
-const Jobs = () => {
+const Jobs = ({ handleSavedJobs }) => {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-5">Find Your Dream Job</h1>
@@ -10,10 +10,13 @@ const Jobs = () => {
         {jobs.map((job) => (
           <div className="col-lg-4 col-md-6 col-sm-12" key={job.id}>
             <JobCard
+              id={job.id}
               title={job.title}
               company={job.company}
               location={job.location}
               type={job.type}
+              handleSavedJobs={handleSavedJobs}
+              job={job}
             />
           </div>
         ))}
