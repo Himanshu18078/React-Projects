@@ -11,7 +11,7 @@ const jobs = [
     title: "Full Stack Developer",
     company: "Microsoft",
     location: "Bangalore",
-    type: "Full Time",
+    type: "Part Time",
   },
   {
     id: 3,
@@ -25,14 +25,14 @@ const jobs = [
     title: "Data Analytics",
     company: "SpaceX",
     location: "Bangalore",
-    type: "Full Time",
+    type: "Part Time",
   },
   {
     id: 5,
     title: "Frontend Devloper",
     company: "Meta",
     location: "Bangalore",
-    type: "Full Time",
+    type: "Internship",
   },
 ];
 
