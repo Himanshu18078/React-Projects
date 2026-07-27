@@ -1,12 +1,12 @@
 import { FaBuilding, FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 import styles from "./JobCard.module.css";
 
-const JobCard = ({title,company,location,type,job,handleSavedJobs,isSaved,handleRemoveJob,id}) => {
+const JobCard = ({title,company,location,type,job,handleSavedJobs,isSaved,handleRemoveJob,id,handleAppliedJobs , isApplied}) => {
   const saveButton = () =>{
-    handleSavedJobs(job)
+    handleSavedJobs(job);
   }
   const applyButton = () =>{
-    alert("Applied for the job successfully");
+    handleAppliedJobs(job);
   }
   const deleteButton = () => {
     handleRemoveJob(id);
@@ -28,14 +28,13 @@ const JobCard = ({title,company,location,type,job,handleSavedJobs,isSaved,handle
         <p className={styles.info}>
           <FaBriefcase /> {type}
         </p>
-
-        <button
+        {!(isApplied) && <button
           className={`btn btn-primary ${styles.button}`}
           onClick= {applyButton}
         >
           Apply Now
-        </button>
-        {!isSaved && <button
+        </button>}
+        {!(isSaved || isApplied ) && <button
         className={`btn btn-success ${styles.button}`}
         onClick={saveButton}
         >Save Job</button> }

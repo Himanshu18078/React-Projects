@@ -2,7 +2,7 @@ import jobs from "../../data/jobs";
 import JobCard from "../../components/JobCard/JobCard";
 import { useState } from "react";
 
-const Jobs = ({ handleSavedJobs }) => {
+const Jobs = ({ handleSavedJobs , handleAppliedJobs }) => {
   //this is for the search bar
   const [jobSearched, setSearchedJob] = useState("");
   //this is for the job type
@@ -54,7 +54,9 @@ const Jobs = ({ handleSavedJobs }) => {
               location={job.location}
               type={job.type}
               handleSavedJobs={handleSavedJobs}
+              handleAppliedJobs={handleAppliedJobs}
               job={job}
+              
             />
           </div>
         )))}

@@ -1,6 +1,6 @@
 import JobCard from "../../components/JobCard/JobCard";
 
-const SavedJobs = ({ savedJobs, handleRemoveJob }) => {
+const SavedJobs = ({ savedJobs, handleRemoveJob ,handleAppliedJobs}) => {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-5">Saved Jobs</h1>
@@ -18,7 +18,9 @@ const SavedJobs = ({ savedJobs, handleRemoveJob }) => {
                 location={job.location}
                 type={job.type}
                 isSaved={true}
+                job={job}
                 handleRemoveJob={handleRemoveJob}
+                handleAppliedJobs={handleAppliedJobs}
               />
             </div>
           ))
