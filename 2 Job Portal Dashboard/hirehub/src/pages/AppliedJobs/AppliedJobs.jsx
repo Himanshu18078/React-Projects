@@ -1,6 +1,6 @@
 import JobCard from "../../components/JobCard/JobCard";
 
-const AppliedJobs = ({ appliedJobs }) => {
+const AppliedJobs = ({ appliedJobs, changeStatus }) => {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-5">Applied Jobs</h1>
@@ -18,6 +18,8 @@ const AppliedJobs = ({ appliedJobs }) => {
               location={job.location}
               type={job.type}
               isApplied={true}
+              status={job.status}
+              changeStatus={changeStatus}
             />
           </div>
         ))}

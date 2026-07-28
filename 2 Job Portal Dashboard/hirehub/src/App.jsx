@@ -61,8 +61,12 @@ function App() {
   };
   // Function to save applied jobs
   const handleAppliedJobs = (job) => {
-    if (!appliedJobs.some((appliedJob) => appliedJob.id === job.id)) {
-      const currentJobs = [...appliedJobs, job];
+    const jobWithStatus = {
+      ...job,
+      status: "Applied"
+    };
+    if (!appliedJobs.some((item) => item.id === jobWithStatus.id)) {
+      const currentJobs = [...appliedJobs, jobWithStatus];
       setAppliedJobs(currentJobs);
       localStorage.setItem(
         "appliedJobs",
@@ -72,6 +76,24 @@ function App() {
       alert("You have already applied for this job");
     }
   };
+  
+  //function to change the status of the applied job
+  const changeStatus = (jobId, status) => {
+  const updatedJobs = appliedJobs.map((item) => {
+    if (item.id === jobId) {
+      return {
+        ...item,
+        status
+      };
+    }
+    return item;
+  });
+  setAppliedJobs(updatedJobs);
+  localStorage.setItem(
+    "appliedJobs",
+    JSON.stringify(updatedJobs)
+  );
+};
 
 
   return (
@@ -99,8 +121,8 @@ function App() {
           }
         />
         <Route
-        path="/applied-jobs"
-        element = {<AppliedJobs appliedJobs = {appliedJobs}></AppliedJobs>}
+          path="/applied-jobs"
+          element={<AppliedJobs appliedJobs={appliedJobs} changeStatus ={changeStatus} ></AppliedJobs>}
         />
       </Routes>
     </>
