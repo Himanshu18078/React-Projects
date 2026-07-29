@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes , useParams} from "react-router-dom";
 import { useState } from "react";
 
 import Jobs from "./pages/Jobs/Jobs";
@@ -6,6 +6,7 @@ import SavedJobs from "./pages/SavedJobs/SavedJobs";
 import Home from "./pages/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import AppliedJobs from "./pages/AppliedJobs/AppliedJobs";
+import JobDetails from "./pages/JobDetails/JobDetails";
 import "./App.css";
 function App() {
   /*
@@ -76,24 +77,31 @@ function App() {
       alert("You have already applied for this job");
     }
   };
-  
+  const handleRemoveAppliedJobs = (id)=>{
+    const updatedJobs = appliedJobs.filter((job) => job.id !== id);
+    setAppliedJobs(updatedJobs);
+    localStorage.setItem(
+      "appliedJobs",
+      JSON.stringify(updatedJobs)
+    );
+  }
   //function to change the status of the applied job
   const changeStatus = (jobId, status) => {
-  const updatedJobs = appliedJobs.map((item) => {
-    if (item.id === jobId) {
-      return {
-        ...item,
-        status
-      };
-    }
-    return item;
-  });
-  setAppliedJobs(updatedJobs);
-  localStorage.setItem(
-    "appliedJobs",
-    JSON.stringify(updatedJobs)
-  );
-};
+    const updatedJobs = appliedJobs.map((item) => {
+      if (item.id === jobId) {
+        return {
+          ...item,
+          status
+        };
+      }
+      return item;
+    });
+    setAppliedJobs(updatedJobs);
+    localStorage.setItem(
+      "appliedJobs",
+      JSON.stringify(updatedJobs)
+    );
+  };
 
 
   return (
@@ -122,7 +130,11 @@ function App() {
         />
         <Route
           path="/applied-jobs"
-          element={<AppliedJobs appliedJobs={appliedJobs} changeStatus ={changeStatus} ></AppliedJobs>}
+          element={<AppliedJobs appliedJobs={appliedJobs} changeStatus={changeStatus} handleRemoveAppliedJobs = {handleRemoveAppliedJobs} ></AppliedJobs>}
+        />
+        <Route
+          path="/jobs/:id"
+          element={<JobDetails  handleAppliedJobs = {handleAppliedJobs} appliedJobs = {appliedJobs}/>}
         />
       </Routes>
     </>

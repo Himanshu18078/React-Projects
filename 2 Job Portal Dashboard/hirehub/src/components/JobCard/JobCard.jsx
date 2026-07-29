@@ -1,16 +1,21 @@
 import { FaBuilding, FaMapMarkerAlt, FaBriefcase, FaTasks } from "react-icons/fa";
 import styles from "./JobCard.module.css";
+import { useNavigate } from "react-router-dom";
 
-const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved, handleRemoveJob, id, handleAppliedJobs, isApplied, status, changeStatus }) => {
+const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved, handleRemoveJob, id, handleAppliedJobs, isApplied, status, changeStatus ,handleRemoveAppliedJobs}) => {
   const saveButton = () => {
     handleSavedJobs(job);
-  }
-  const applyButton = () => {
-    handleAppliedJobs(job);
   }
   const deleteButton = () => {
     handleRemoveJob(id);
   }
+  const applyButton = () => {
+    handleAppliedJobs(job);
+  }
+  const deleteApplied = () => {
+    handleRemoveAppliedJobs(id);
+  }
+  const navigate = useNavigate();
   return (
     <div className={`card ${styles.card}`}>
       <div className="card-body">
@@ -36,12 +41,12 @@ const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved
               Status:
               <span
                 className={`badge ms-2 ${status === "Applied"
-                    ? "bg-primary"
-                    : status === "Interview"
-                      ? "bg-warning text-dark"
-                      : status === "Selected"
-                        ? "bg-success"
-                        : "bg-danger"
+                  ? "bg-primary"
+                  : status === "Interview"
+                    ? "bg-warning text-dark"
+                    : status === "Selected"
+                      ? "bg-success"
+                      : "bg-danger"
                   }`}
               >
                 {status}
@@ -50,9 +55,10 @@ const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved
 
             <select
               className="form-select form-select-sm"
-              style={{ maxWidth: "180px" }}
+              style={{ maxWidth: "180px" , marginBottom : "7px"}}
               value={status}
               onChange={(e) => changeStatus(id, e.target.value)}
+              disabled={status === "Selected" || status === "Rejected"}
             >
               <option value="Applied">📄 Applied</option>
               <option value="Interview">🎤 Interview</option>
@@ -61,12 +67,24 @@ const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved
             </select>
           </div>
         )}
-
+        <button
+        className={`btn btn-primary ${styles.button}`}
+        onClick={() => navigate(`/jobs/${id}`)}
+      >
+        View Details
+      </button>
         {!(isApplied) && <button
           className={`btn btn-primary ${styles.button}`}
           onClick={applyButton}
         >
           Apply Now
+        </button>}
+
+        {(isApplied) && <button
+          className={`btn btn btn-danger ${styles.button}`}
+          onClick={deleteApplied}
+        >
+          Remove Applied
         </button>}
         {!(isSaved || isApplied) && <button
           className={`btn btn-success ${styles.button}`}
