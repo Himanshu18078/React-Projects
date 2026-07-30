@@ -1,6 +1,7 @@
-import { Route, Routes , useParams} from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify"; // ⭐ Added toast
+import "react-toastify/dist/ReactToastify.css";
+import { Route, Routes, useParams } from "react-router-dom";
 import { useState } from "react";
-
 import Jobs from "./pages/Jobs/Jobs";
 import SavedJobs from "./pages/SavedJobs/SavedJobs";
 import Home from "./pages/Home/Home";
@@ -30,23 +31,23 @@ function App() {
     JSON.parse(localStorage.getItem("appliedJobs")) || []
   );
   // Function to save a job
+  // Function to save a job
   const handleSavedJobs = (job) => {
-    /*
-      .some() check karta hai ki array mein koi job
-      same id ke saath already exist karti hai ya nahi.
-
-      Match mila -> true
-      Match nahi mila -> false
-    */
     if (!savedJobs.some((savedJob) => savedJob.id === job.id)) {
       const currentJobs = [...savedJobs, job];
+
       setSavedJobs(currentJobs);
+
       localStorage.setItem(
         "savedJobs",
         JSON.stringify(currentJobs)
       );
+
+      // ⭐ Success Toast
+      toast.success("Job saved successfully!");
     } else {
-      alert("Job Already Saved");
+      // ⭐ Warning Toast
+      toast.warning("Job already saved!");
     }
   };
   // Function to remove a saved job
@@ -61,23 +62,30 @@ function App() {
     );
   };
   // Function to save applied jobs
-  const handleAppliedJobs = (job) => {
-    const jobWithStatus = {
-      ...job,
-      status: "Applied"
-    };
-    if (!appliedJobs.some((item) => item.id === jobWithStatus.id)) {
-      const currentJobs = [...appliedJobs, jobWithStatus];
-      setAppliedJobs(currentJobs);
-      localStorage.setItem(
-        "appliedJobs",
-        JSON.stringify(currentJobs)
-      );
-    } else {
-      alert("You have already applied for this job");
-    }
+  // Function to save applied jobs
+const handleAppliedJobs = (job) => {
+  const jobWithStatus = {
+    ...job,
+    status: "Applied"
   };
-  const handleRemoveAppliedJobs = (id)=>{
+  if (!appliedJobs.some((item) => item.id === jobWithStatus.id)) {
+    const currentJobs = [...appliedJobs, jobWithStatus];
+
+    setAppliedJobs(currentJobs);
+
+    localStorage.setItem(
+      "appliedJobs",
+      JSON.stringify(currentJobs)
+    );
+
+    // ⭐ Success Toast
+    toast.success("Applied successfully!");
+  } else {
+    // ⭐ Warning Toast
+    toast.warning("You have already applied for this job!");
+  }
+};
+  const handleRemoveAppliedJobs = (id) => {
     const updatedJobs = appliedJobs.filter((job) => job.id !== id);
     setAppliedJobs(updatedJobs);
     localStorage.setItem(
@@ -103,42 +111,72 @@ function App() {
     );
   };
 
-
   return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
-        <Route
-          path="/jobs"
-          element={
-            <Jobs
-              handleSavedJobs={handleSavedJobs}
-              handleAppliedJobs={handleAppliedJobs}
-            />
-          }
-        />
-        <Route
-          path="/saved-jobs"
-          element={
-            <SavedJobs savedJobs={savedJobs} handleRemoveJob={handleRemoveJob} handleAppliedJobs={handleAppliedJobs}
-            />
-          }
-        />
-        <Route
-          path="/applied-jobs"
-          element={<AppliedJobs appliedJobs={appliedJobs} changeStatus={changeStatus} handleRemoveAppliedJobs = {handleRemoveAppliedJobs} ></AppliedJobs>}
-        />
-        <Route
-          path="/jobs/:id"
-          element={<JobDetails  handleAppliedJobs = {handleAppliedJobs} appliedJobs = {appliedJobs}/>}
-        />
-      </Routes>
-    </>
-  );
+  <>
+    <Navbar />
+
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Home
+            savedJobs={savedJobs}
+            appliedJobs={appliedJobs}
+          />
+        }
+      />
+
+      <Route
+        path="/jobs"
+        element={
+          <Jobs
+            handleSavedJobs={handleSavedJobs}
+            handleAppliedJobs={handleAppliedJobs}
+          />
+        }
+      />
+
+      <Route
+        path="/saved-jobs"
+        element={
+          <SavedJobs
+            savedJobs={savedJobs}
+            handleRemoveJob={handleRemoveJob}
+            handleAppliedJobs={handleAppliedJobs}
+          />
+        }
+      />
+
+      <Route
+        path="/applied-jobs"
+        element={
+          <AppliedJobs
+            appliedJobs={appliedJobs}
+            changeStatus={changeStatus}
+            handleRemoveAppliedJobs={handleRemoveAppliedJobs}
+          />
+        }
+      />
+
+      <Route
+        path="/jobs/:id"
+        element={
+          <JobDetails
+            handleAppliedJobs={handleAppliedJobs}
+            appliedJobs={appliedJobs}
+          />
+        }
+      />
+    </Routes>
+
+    {/* ⭐ Toast Notification Container */}
+    <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      theme="colored"
+    />
+  </>
+);
 }
 
 export default App;
