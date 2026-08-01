@@ -2,7 +2,7 @@ import { FaBuilding, FaMapMarkerAlt, FaBriefcase, FaTasks } from "react-icons/fa
 import styles from "./JobCard.module.css";
 import { useNavigate } from "react-router-dom";
 
-const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved, handleRemoveJob, id, handleAppliedJobs, isApplied, status, changeStatus ,handleRemoveAppliedJobs}) => {
+const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved, handleRemoveJob, id, handleAppliedJobs, isApplied, status, changeStatus, handleRemoveAppliedJobs }) => {
   const saveButton = () => {
     handleSavedJobs(job);
   }
@@ -55,7 +55,7 @@ const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved
 
             <select
               className="form-select form-select-sm"
-              style={{ maxWidth: "180px" , marginBottom : "7px"}}
+              style={{ maxWidth: "180px", marginBottom: "7px" }}
               value={status}
               onChange={(e) => changeStatus(id, e.target.value)}
               disabled={status === "Selected" || status === "Rejected"}
@@ -68,17 +68,19 @@ const JobCard = ({ title, company, location, type, job, handleSavedJobs, isSaved
           </div>
         )}
         <button
-        className={`btn btn-primary ${styles.button}`}
-        onClick={() => navigate(`/jobs/${id}`)}
-      >
-        View Details
-      </button>
-        {!(isApplied) && <button
           className={`btn btn-primary ${styles.button}`}
-          onClick={applyButton}
+          onClick={() => navigate(`/jobs/${id}`)}
         >
-          Apply Now
-        </button>}
+          View Details
+        </button>
+        <button
+          onClick={applyButton}
+          disabled={isApplied}
+          className={`btn ${isApplied ? "btn-success" : "btn-primary"
+            } ${styles.button}`}
+        >
+          {isApplied ? "Already Applied" : "Apply Now"}
+        </button>
 
         {(isApplied) && <button
           className={`btn btn btn-danger ${styles.button}`}

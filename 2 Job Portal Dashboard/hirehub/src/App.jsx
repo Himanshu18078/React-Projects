@@ -52,46 +52,49 @@ function App() {
   };
   // Function to remove a saved job
   const handleRemoveJob = (id) => {
-    const updatedJobs = savedJobs.filter(
-      (job) => job.id !== id
-    );
-    setSavedJobs(updatedJobs);
-    localStorage.setItem(
-      "savedJobs",
-      JSON.stringify(updatedJobs)
-    );
+    if (confirm("Are you sure?")) {
+      const updatedJobs = savedJobs.filter(
+        (job) => job.id !== id
+      );
+      setSavedJobs(updatedJobs);
+      localStorage.setItem(
+        "savedJobs",
+        JSON.stringify(updatedJobs)
+      );
+    }
   };
   // Function to save applied jobs
-  // Function to save applied jobs
-const handleAppliedJobs = (job) => {
-  const jobWithStatus = {
-    ...job,
-    status: "Applied"
+  const handleAppliedJobs = (job) => {
+    const jobWithStatus = {
+      ...job,
+      status: "Applied"
+    };
+    if (!appliedJobs.some((item) => item.id === jobWithStatus.id)) {
+      const currentJobs = [...appliedJobs, jobWithStatus];
+
+      setAppliedJobs(currentJobs);
+
+      localStorage.setItem(
+        "appliedJobs",
+        JSON.stringify(currentJobs)
+      );
+
+      // ⭐ Success Toast
+      toast.success("Applied successfully!");
+    } else {
+      // ⭐ Warning Toast
+      toast.warning("You have already applied for this job!");
+    }
   };
-  if (!appliedJobs.some((item) => item.id === jobWithStatus.id)) {
-    const currentJobs = [...appliedJobs, jobWithStatus];
-
-    setAppliedJobs(currentJobs);
-
-    localStorage.setItem(
-      "appliedJobs",
-      JSON.stringify(currentJobs)
-    );
-
-    // ⭐ Success Toast
-    toast.success("Applied successfully!");
-  } else {
-    // ⭐ Warning Toast
-    toast.warning("You have already applied for this job!");
-  }
-};
   const handleRemoveAppliedJobs = (id) => {
-    const updatedJobs = appliedJobs.filter((job) => job.id !== id);
-    setAppliedJobs(updatedJobs);
-    localStorage.setItem(
-      "appliedJobs",
-      JSON.stringify(updatedJobs)
-    );
+    if (confirm("Are you sure?")) {
+      const updatedJobs = appliedJobs.filter((job) => job.id !== id);
+      setAppliedJobs(updatedJobs);
+      localStorage.setItem(
+        "appliedJobs",
+        JSON.stringify(updatedJobs)
+      );
+    }
   }
   //function to change the status of the applied job
   const changeStatus = (jobId, status) => {
@@ -112,71 +115,71 @@ const handleAppliedJobs = (job) => {
   };
 
   return (
-  <>
-    <Navbar />
+    <>
+      <Navbar />
 
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Home
-            savedJobs={savedJobs}
-            appliedJobs={appliedJobs}
-          />
-        }
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              savedJobs={savedJobs}
+              appliedJobs={appliedJobs}
+            />
+          }
+        />
+
+        <Route
+          path="/jobs"
+          element={
+            <Jobs
+              handleSavedJobs={handleSavedJobs}
+              handleAppliedJobs={handleAppliedJobs}
+            />
+          }
+        />
+
+        <Route
+          path="/saved-jobs"
+          element={
+            <SavedJobs
+              savedJobs={savedJobs}
+              handleRemoveJob={handleRemoveJob}
+              handleAppliedJobs={handleAppliedJobs}
+            />
+          }
+        />
+
+        <Route
+          path="/applied-jobs"
+          element={
+            <AppliedJobs
+              appliedJobs={appliedJobs}
+              changeStatus={changeStatus}
+              handleRemoveAppliedJobs={handleRemoveAppliedJobs}
+            />
+          }
+        />
+
+        <Route
+          path="/jobs/:id"
+          element={
+            <JobDetails
+              handleAppliedJobs={handleAppliedJobs}
+              appliedJobs={appliedJobs}
+            />
+          }
+        />
+      </Routes>
+
+      {/* ⭐ Toast Notification Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        theme="colored"
       />
-
-      <Route
-        path="/jobs"
-        element={
-          <Jobs
-            handleSavedJobs={handleSavedJobs}
-            handleAppliedJobs={handleAppliedJobs}
-          />
-        }
-      />
-
-      <Route
-        path="/saved-jobs"
-        element={
-          <SavedJobs
-            savedJobs={savedJobs}
-            handleRemoveJob={handleRemoveJob}
-            handleAppliedJobs={handleAppliedJobs}
-          />
-        }
-      />
-
-      <Route
-        path="/applied-jobs"
-        element={
-          <AppliedJobs
-            appliedJobs={appliedJobs}
-            changeStatus={changeStatus}
-            handleRemoveAppliedJobs={handleRemoveAppliedJobs}
-          />
-        }
-      />
-
-      <Route
-        path="/jobs/:id"
-        element={
-          <JobDetails
-            handleAppliedJobs={handleAppliedJobs}
-            appliedJobs={appliedJobs}
-          />
-        }
-      />
-    </Routes>
-
-    {/* ⭐ Toast Notification Container */}
-    <ToastContainer
-      position="top-right"
-      autoClose={2000}
-      theme="colored"
-    />
-  </>
-);
+    </>
+  );
 }
 
 export default App;
