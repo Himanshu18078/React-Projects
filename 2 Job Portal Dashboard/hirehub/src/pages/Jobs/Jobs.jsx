@@ -1,8 +1,15 @@
 import jobs from "../../data/jobs";
 import JobCard from "../../components/JobCard/JobCard";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import Spinner from "../../components/Spinner/Spinner";
 const Jobs = ({ handleSavedJobs, handleAppliedJobs }) => {
+  // ============================
+  // All States
+  // ============================
+
+  // Loading State
+  const [loading, setLoading] = useState(true);
+
   // Search by title
   const [jobSearched, setSearchedJob] = useState("");
 
@@ -12,6 +19,29 @@ const Jobs = ({ handleSavedJobs, handleAppliedJobs }) => {
   // Search by location
   const [searchLocation, setSearchLocation] = useState("");
 
+  // ============================
+  // Runs only once when component mounts
+  // ============================
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    // Cleanup Function
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // ============================
+  // Show Loading Screen
+  // ============================
+  if (loading) {
+    return <Spinner></Spinner>
+  }
+  // ============================
+  // Filter Jobs
+  // ============================
   const filterJob = jobs.filter((job) => {
     const matchesSearch = job.title
       .toLowerCase()
@@ -32,7 +62,6 @@ const Jobs = ({ handleSavedJobs, handleAppliedJobs }) => {
       <h1 className="text-center mb-5">Find Your Dream Job</h1>
 
       <div className="row g-3">
-
         <div className="col-md-8">
           <input
             type="search"
@@ -65,7 +94,6 @@ const Jobs = ({ handleSavedJobs, handleAppliedJobs }) => {
             onChange={(e) => setSearchLocation(e.target.value)}
           />
         </div>
-
       </div>
 
       <div className="row g-4">
@@ -99,5 +127,4 @@ const Jobs = ({ handleSavedJobs, handleAppliedJobs }) => {
     </div>
   );
 };
-
 export default Jobs;

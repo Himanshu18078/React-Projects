@@ -1,14 +1,19 @@
-import { ToastContainer, toast } from "react-toastify"; // ⭐ Added toast
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useState } from "react";
+
 import Jobs from "./pages/Jobs/Jobs";
 import SavedJobs from "./pages/SavedJobs/SavedJobs";
 import Home from "./pages/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import AppliedJobs from "./pages/AppliedJobs/AppliedJobs";
 import JobDetails from "./pages/JobDetails/JobDetails";
+import NotFound from "./pages/NotFound/NotFound";
+import Footer from "./components/Footer/Footer";
+
 import "./App.css";
+
 function App() {
   /*
     LocalStorage se saved jobs ko get kar rahe hain.
@@ -26,11 +31,12 @@ function App() {
   const [savedJobs, setSavedJobs] = useState(
     JSON.parse(localStorage.getItem("savedJobs")) || []
   );
+
   // LocalStorage se applied jobs load kar rahe hain
   const [appliedJobs, setAppliedJobs] = useState(
     JSON.parse(localStorage.getItem("appliedJobs")) || []
   );
-  // Function to save a job
+
   // Function to save a job
   const handleSavedJobs = (job) => {
     if (!savedJobs.some((savedJob) => savedJob.id === job.id)) {
@@ -43,33 +49,40 @@ function App() {
         JSON.stringify(currentJobs)
       );
 
-      // ⭐ Success Toast
       toast.success("Job saved successfully!");
     } else {
-      // ⭐ Warning Toast
       toast.warning("Job already saved!");
     }
   };
+
   // Function to remove a saved job
   const handleRemoveJob = (id) => {
     if (confirm("Are you sure?")) {
       const updatedJobs = savedJobs.filter(
         (job) => job.id !== id
       );
+
       setSavedJobs(updatedJobs);
+
       localStorage.setItem(
         "savedJobs",
         JSON.stringify(updatedJobs)
       );
     }
   };
+
   // Function to save applied jobs
   const handleAppliedJobs = (job) => {
     const jobWithStatus = {
       ...job,
-      status: "Applied"
+      status: "Applied",
     };
-    if (!appliedJobs.some((item) => item.id === jobWithStatus.id)) {
+
+    if (
+      !appliedJobs.some(
+        (item) => item.id === jobWithStatus.id
+      )
+    ) {
       const currentJobs = [...appliedJobs, jobWithStatus];
 
       setAppliedJobs(currentJobs);
@@ -79,35 +92,45 @@ function App() {
         JSON.stringify(currentJobs)
       );
 
-      // ⭐ Success Toast
       toast.success("Applied successfully!");
     } else {
-      // ⭐ Warning Toast
-      toast.warning("You have already applied for this job!");
+      toast.warning(
+        "You have already applied for this job!"
+      );
     }
   };
+
+  // Function to remove an applied job
   const handleRemoveAppliedJobs = (id) => {
     if (confirm("Are you sure?")) {
-      const updatedJobs = appliedJobs.filter((job) => job.id !== id);
+      const updatedJobs = appliedJobs.filter(
+        (job) => job.id !== id
+      );
+
       setAppliedJobs(updatedJobs);
+
       localStorage.setItem(
         "appliedJobs",
         JSON.stringify(updatedJobs)
       );
     }
-  }
-  //function to change the status of the applied job
+  };
+
+  // Function to change the status of an applied job
   const changeStatus = (jobId, status) => {
     const updatedJobs = appliedJobs.map((item) => {
       if (item.id === jobId) {
         return {
           ...item,
-          status
+          status,
         };
       }
+
       return item;
     });
+
     setAppliedJobs(updatedJobs);
+
     localStorage.setItem(
       "appliedJobs",
       JSON.stringify(updatedJobs)
@@ -156,7 +179,9 @@ function App() {
             <AppliedJobs
               appliedJobs={appliedJobs}
               changeStatus={changeStatus}
-              handleRemoveAppliedJobs={handleRemoveAppliedJobs}
+              handleRemoveAppliedJobs={
+                handleRemoveAppliedJobs
+              }
             />
           }
         />
@@ -170,14 +195,31 @@ function App() {
             />
           }
         />
+
+        {/*
+          The "*" route is called the wildcard route.
+
+          It matches any URL that doesn't match the routes defined above.
+
+          Examples:
+          "/"             -> Home Page
+          "/jobs"         -> Jobs Page
+          "/saved-jobs"   -> Saved Jobs
+          "/xyz"          -> Not Found Page
+
+          This route should always be placed at the end of the
+          <Routes> component. If no route matches, React Router
+          automatically renders the NotFound component.
+        */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {/* ⭐ Toast Notification Container */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
         theme="colored"
       />
+      <Footer />
     </>
   );
 }
